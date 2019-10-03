@@ -1,4 +1,4 @@
-package net.skocha.controller;
+package net.mypofol.controller;
 
 
 import org.springframework.stereotype.Controller;
