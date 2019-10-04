@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.mypofol.mapper.UserMapper">
+
+	<select id="getList" resultType="net.mypofol.model.UserVO">
+		select * from t_user
+	</select>
+
+	<select id="getUserById" resultType="net.mypofol.model.UserVO">
+		select * from t_user where
+		id = #{id}
+	</select>
+
+	<insert id="createUser">
+		insert into t_user (no, id, password, name, email)
+		values
+		(seq_user.nextval, #{id}, #{password}, #{name}, #{email})
+	</insert>
+
+</mapper>    
