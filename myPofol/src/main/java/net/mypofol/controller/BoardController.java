@@ -52,6 +52,8 @@ public class BoardController {
 		}
 		reAttr.addAttribute("pageNum", pagi.getPageNum());
 		reAttr.addAttribute("amount", pagi.getAmount());
+		reAttr.addAttribute("type", pagi.getType());
+		reAttr.addAttribute("keyword", pagi.getKeyword());
 		
 		return "redirect:/board/list";
 	}
@@ -63,6 +65,8 @@ public class BoardController {
 		}
 		reAttr.addAttribute("pageNum", pagi.getPageNum());
 		reAttr.addAttribute("amount", pagi.getAmount());
+		reAttr.addAttribute("type", pagi.getType());
+		reAttr.addAttribute("keyword", pagi.getKeyword());
 		
 		return "redirect:/board/list";
 	}

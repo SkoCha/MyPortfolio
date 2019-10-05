@@ -46,6 +46,8 @@
 				</div>
 				<input type="hidden" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
 				<input type="hidden" name="amount" value='<c:out value="${pagi.amount}" />'>
+				<input type="hidden" name="type" value='<c:out value="${pagi.type}" />'>
+				<input type="hidden" name="keyword" value='<c:out value="${pagi.keyword}" />'>
 				<button type="submit" data-oper='modify' class="btn btn-default">수정 하기</button>
 				<button type="submit" data-oper='remove' class="btn btn-danger">삭제 하기</button>
 				<button type="submit" data-oper='list' class="btn btn-info">목록 보기</button>
@@ -73,9 +75,13 @@
 				formObj.attr("action", "/board/list").attr("method", "get");
 				var pageNumVal = $("input[name='pageNum']").clone();
 				var amountVal = $("input[name='amount']").clone();
+				var typeVal = $("input[name='type']").clone();
+				var keywordVal = $("input[name='keyword']").clone();
 				formObj.empty();
 				formObj.append(pageNumVal);
 				formObj.append(amountVal);
+				formObj.append(typeVal);
+				formObj.append(keywordVal);
 			}
 			formObj.submit();
 		});

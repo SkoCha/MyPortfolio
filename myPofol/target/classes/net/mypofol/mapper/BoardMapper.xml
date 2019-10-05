@@ -17,9 +17,14 @@
 		<![CDATA[
 			select bno, title, content, writer, regdate, updatedate from
 			(select /*+INDEX_DESC(t_board pk_board)*/ 
-			rownum rn, bno, title, content, writer, regdate, updatedate from t_board where rownum <= #{pageNum} * #{amount})
-			where rn > (#{pageNum} - 1) * #{amount}		
+			rownum rn, bno, title, content, writer, regdate, updatedate from t_board 
+			where
 		]]>
+			<include refid="searching"/>
+		<![CDATA[
+			rownum <= #{pageNum} * #{amount})
+			where rn > (#{pageNum} - 1) * #{amount}		
+			]]>		
 	</select>
 
 	<select id="read" resultType="net.mypofol.model.BoardVO">
@@ -27,9 +32,9 @@
 	</select>
 	
 	<select id="readTotalCount" resultType="int">
-		<![CDATA[
-		select count(*) from t_board where bno > 0
-		]]>
+		select count(*) from t_board where
+		<include refid="searching"/> 
+		<![CDATA[	bno > 0		]]>
 	</select>
 
 	<!-- INSERT QUERY -->
@@ -60,5 +65,26 @@
 	<delete id="delete">
 		delete from t_board where bno = #{bno}
 	</delete>
+	
+	<!-- <sql> -->
+	<sql id="searching">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'C'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
 
 </mapper>    

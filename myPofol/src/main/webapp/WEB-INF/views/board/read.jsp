@@ -41,6 +41,8 @@
 					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}" />'>
 					<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
 					<input type="hidden" id="amount" name="amount" value='<c:out value="${pagi.amount}" />'>
+					<input type="hidden" id="type" name="type" value='<c:out value="${pagi.type}" />'>
+					<input type="hidden" id="keyword" name="keyword" value='<c:out value="${pagi.keyword}" />'>
 				</form>
 				<!-- /.panel-body -->
 			</div>

@@ -71,4 +71,14 @@ public class BoardMapperTest {
 	 * 
 	 * }
 	 */
+	
+	@Test
+	public void searchingTest() {
+		Pagination pagi = new Pagination();
+		pagi.setKeyword("테스트");
+		pagi.setType("TC");
+		
+		List<BoardVO> list = mapper.readListWithPaging(pagi);
+		list.forEach(board -> log.info(board));
+	}
 }
