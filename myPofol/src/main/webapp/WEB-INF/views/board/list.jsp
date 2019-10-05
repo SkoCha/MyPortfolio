@@ -29,18 +29,55 @@
 					</thead>
 					<c:forEach items="${list}" var="board">
 						<tr>
-							<td><c:out value="${board.bno}"></c:out></td>
-							<td><a href='/board/read?bno=<c:out value="${board.bno}"/>'><c:out value="${board.title}"></c:out></a></td>
-							<td><c:out value="${board.writer}"></c:out></td>
-							<td><fmt:formatDate pattern="yyyy-MM-dd"
-									value="${board.regDate}" /></td>
-							<td><fmt:formatDate pattern="yyyy-MM-dd"
-									value="${board.updateDate}" /></td>
+							<td>
+								<c:out value="${board.bno}"></c:out>
+							</td>
+							<%-- <td><a class='move' href='/board/read?bno=<c:out value="${board.bno}"/>'><c:out value="${board.title}"></c:out></a></td> --%>
+							<td>
+								<a class='move' href='/board/read?bno=${board.bno}&pageNum=${pagination.pagi.pageNum}&amount=${pagination.pagi.amount}'>
+									<c:out value="${board.title}"></c:out>
+								</a>
+							</td>
+							<td>
+								<c:out value="${board.writer}"></c:out>
+							</td>
+							<td>
+								<fmt:formatDate pattern="yyyy-MM-dd" value="${board.regDate}" />
+							</td>
+							<td>
+								<fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}" />
+							</td>
 						</tr>
 					</c:forEach>
-
 				</table>
-				<!-- modal -->
+				
+				<!-- Paging처리 -->				
+				<div class="pull-right">
+					<ul class="pagination">
+						 <c:if test="${pagination.prev}">
+						 	<li class="paginate_button previous">
+						 		<a href="/board/list?pageNum=${pagination.startPage - 1}">이전</a>
+						 	</li>
+						 </c:if>
+						 <c:forEach var="num" begin="${pagination.startPage}" end="${pagination.endPage}">
+							<li class="pagination_button ${pagination.pagi.pageNum == num ? "active":""} ">
+								<a href="/board/list?pageNum=${num}&amount=${pagination.pagi.amount}">${num}</a>
+							</li>						 
+						 </c:forEach>
+						 <c:if test="${pagination.next}">
+						 	<li class="paginate_button next">
+						 		<a href="/board/list?pageNum=${pagination.endPage + 1}">다음</a>
+						 	</li>
+						 </c:if>
+					</ul>
+				</div>
+				<%-- <form id="actionForm" action="/board/list" method="get">
+					<input type="hidden" name="pageNum" value="${pagination.pagi.pageNum}">
+					<input type="hidden" name="amount" value="${pagination.pagi.amount}">
+				</form> --%>
+				<!-- Paging처리 끝-->
+				
+				<!-- modal창 처리 -->
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 					aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
@@ -54,9 +91,8 @@
 								처리가 완료 되었습니다.
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default"
+								<button type="button" class="btn btn-primary"
 									data-dismiss="modal">닫기</button>
-								<button type="button" class="btn btn-primary">닫기</button>
 							</div>
 						</div>
 						<!-- /.modal-content -->
@@ -94,6 +130,16 @@
 		$("#regBtn").on("click", function(){
 			self.location = "/board/register";
 		});
+		
+		/* var actionForm = $("#actionForm");
+		
+		$(".paginate_button a").on("click", function(e){
+			e.preventDefault();
+			console.log('click');
+			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			actionForm.submit();
+		}); */		
+		
 		
 	});
 </script>

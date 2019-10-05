@@ -17,22 +17,23 @@
 			</div>
 			<div class="panel-body">
 				<!-- /.panel-heading -->
-
+				<form role="form" action="/board/modify" method="post">
 				<div class="form-group">
 					<label>No</label><input class="form-control" name="bno"
 						value='<c:out value="${board.bno}"/>' readonly="readonly">
 				</div>
 				<div class="form-group">
 					<label>Title</label><input class="form-control" name="title"
-						value='<c:out value="${board.title}"/>' readonly="readonly">
+						value='<c:out value="${board.title}"/>'>
 				</div>
 				<div class="form-group">
 					<label>Content</label>
-					<textarea class="form-control" rows="3" name="content"
-						value='<c:out value="${board.content}"/>'></textarea>
+					<textarea class="form-control" rows="3" name="content">
+						<c:out value="${board.content}"/>
+					</textarea>
 				</div>
 				<div class="form-group">
-					<label>Wrtier</label><input class="form-control" name="wrtier"
+					<label>Writer</label><input class="form-control" name="writer"
 						value='<c:out value="${board.writer}"/>' readonly="readonly">
 				</div>
 				<div class="form-group">
@@ -41,16 +42,43 @@
 				</div>
 				<div class="form-group">
 					<label>Update Date</label><input class="form-control" name='updateDate'
-						value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.regDate}"/>' readonly="readonly">
+						value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updateDate}"/>' readonly="readonly">
 				</div>
+				<input type="hidden" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
+				<input type="hidden" name="amount" value='<c:out value="${pagi.amount}" />'>
 				<button type="submit" data-oper='modify' class="btn btn-default">수정 하기</button>
 				<button type="submit" data-oper='remove' class="btn btn-danger">삭제 하기</button>
 				<button type="submit" data-oper='list' class="btn btn-info">목록 보기</button>
 				<!-- /.panel-body -->
+				</form>
 			</div>
 		</div>
 		<!-- /.panel -->
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		var formObj = $("form");
+		
+		$('button').on("click", function(e){
+			e.preventDefault();
+			var operation = $(this).data("oper");
+			console.log(operation);
+			
+			if(operation === 'remove') {
+				formObj.attr("action", "/board/remove");				
+			} else if(operation === 'list') {
+				formObj.attr("action", "/board/list").attr("method", "get");
+				var pageNumVal = $("input[name='pageNum']").clone();
+				var amountVal = $("input[name='amount']").clone();
+				formObj.empty();
+				formObj.append(pageNumVal);
+				formObj.append(amountVal);
+			}
+			formObj.submit();
+		});
+	});
+</script>
 <%@include file="../includes/footer.jsp"%>

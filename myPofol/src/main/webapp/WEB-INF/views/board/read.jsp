@@ -35,8 +35,13 @@
 					<label>Wrtier</label><input class="form-control" name="wrtier"
 						value='<c:out value="${board.writer}"/>' readonly="readonly">
 				</div>
-				<button data-oper='modify' class="btn btn-default" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">게시글 수정</button>
-				<button data-oper='list' class="btn btn-info" onclick="location.href='/board/list/">목록 보기</button>
+				<button data-oper='modify' class="btn btn-default">게시글 수정</button>
+				<button data-oper='list' class="btn btn-info">목록 보기</button>
+				<form id="operForm" action="/board/modify" method="get">
+					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}" />'>
+					<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
+					<input type="hidden" id="amount" name="amount" value='<c:out value="${pagi.amount}" />'>
+				</form>
 				<!-- /.panel-body -->
 			</div>
 		</div>
@@ -45,3 +50,24 @@
 	<!-- /.col-lg-12 -->
 </div>
 <%@include file="../includes/footer.jsp"%>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		var operForm = $("#operForm");
+		
+		$("button[data-oper='modify']").on("click", function(e){
+			
+			operForm.attr("action", "/board/modify").submit();
+			
+		});
+		
+		$("button[data-oper='list']").on("click", function(e){
+			
+			operForm.find("#bno").remove();
+			operForm.attr("action", "/board/list");
+			operForm.submit();
+			
+		});
+	});
+</script>

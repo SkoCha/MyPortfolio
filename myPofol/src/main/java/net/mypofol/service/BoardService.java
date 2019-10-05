@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.log4j.Log4j;
 import net.mypofol.mapper.BoardMapper;
 import net.mypofol.model.BoardVO;
+import net.mypofol.model.Pagination;
 
 @Service
 @Log4j
@@ -31,9 +32,9 @@ public class BoardService implements IBoardService {
 	}
 
 	@Override
-	public List<BoardVO> readList() {
+	public List<BoardVO> readList(Pagination pagi) {
 		log.info("@BoardService.readList");
-		return mapper.readList();
+		return mapper.readListWithPaging(pagi);
 	}
 
 	/* 파라미터로 받은 board 수정 */
@@ -48,6 +49,13 @@ public class BoardService implements IBoardService {
 	public boolean remove(Long bno) {
 		log.info("@BoardService.remove + " + bno);
 		return mapper.delete(bno) == 1;
+	}
+
+	/* 전체 게시글 개수 리턴 */
+	@Override
+	public int readTotal(Pagination pagi) {
+		log.info("@BoardService.readTotalCount");
+		return mapper.readTotalCount(pagi);
 	}
 
 }
