@@ -19,7 +19,7 @@ public interface ReplyMapper {
 	public List<ReplyVO> readListWithPaging(@Param("pagi") Pagination pagi, @Param("bno") Long bno);
 
 	/* t_reply 테이블의 해당하는 rno 칼럼에 대한 튜플 삭제 */
-	public int delete(int rno);
+	public int delete(Long rno);
 
 	/* t_reply 테이블의 해당 ReplyVO 객체 수정 */ 
 	public int update(ReplyVO reply);

@@ -7,7 +7,7 @@
 
 	<!-- SELECT QUERY -->
 	<select id="read" resultType="net.mypofol.model.ReplyVO">
-		select * from t_reply where rno = #{rno}
+		select * from t_reply where bno = #{bno}
 	</select>
 	
 	<select id="readListWithPaging" resultType="net.mypofol.model.ReplyVO">
