@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.mypofol.mapper.ReplyMapper">
+
+	<!-- SELECT QUERY -->
+	<select id="read" resultType="net.mypofol.model.ReplyVO">
+		select * from t_reply where rno = #{rno}
+	</select>
+	
+	<select id="readListWithPaging" resultType="net.mypofol.model.ReplyVO">
+		select rno, bno, reply, writer, regDate, updateDate from t_reply 
+			where bno = #{bno} order by rno asc
+	</select>
+	
+	
+	<!-- INSERT QUERY -->
+	<insert id="create">
+		insert into t_reply (rno, bno, reply, writer) values (seq_reply.nextval, #{bno}, #{reply} ,#{writer})
+	</insert>
+	
+	
+	<!-- UPDATE QUERY -->
+	<update id="update">
+		update t_reply set reply = #{reply},
+		updatedate = sysdate where rno = #{rno}
+	</update>
+
+
+	<!-- DELETE QUERY -->
+	<delete id="delete">
+		delete from t_reply where rno = #{rno}
+	</delete>
+	
+	<!-- <sql> -->	
+
+</mapper>    
