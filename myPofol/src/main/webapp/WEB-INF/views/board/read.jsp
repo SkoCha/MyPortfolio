@@ -214,7 +214,7 @@ var replyUL = $(".chat");
 			operForm.find("#bno").remove();
 			operForm.attr("action", "/board/list");
 			operForm.submit();
-			
+		 
 		});		
 		
 	});
