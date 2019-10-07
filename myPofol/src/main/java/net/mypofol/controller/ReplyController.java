@@ -32,7 +32,7 @@ public class ReplyController {
 	public ResponseEntity<String> create(@RequestBody ReplyVO reply) {
 		
 		int count = service.register(reply);		
-		return count == 1 ? new ResponseEntity<String>("Reply Register OK", HttpStatus.OK)
+		return count == 1 ? new ResponseEntity<String>("success", HttpStatus.OK)
 							: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -57,7 +57,7 @@ public class ReplyController {
 	@RequestMapping(value = "/{rno}", method = {RequestMethod.DELETE}, produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
 		
-		return service.remove(rno) == 1 ? new ResponseEntity<String>("Reply remove OK", HttpStatus.OK)
+		return service.remove(rno) == 1 ? new ResponseEntity<String>("success", HttpStatus.OK)
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
@@ -67,7 +67,7 @@ public class ReplyController {
 	public ResponseEntity<String> modify(@PathVariable("rno") Long rno, @RequestBody ReplyVO reply) {
 		
 		reply.setRno(rno);
-		return service.modify(reply) == 1 ? new ResponseEntity<String>("Reply modify OK", HttpStatus.OK)
+		return service.modify(reply) == 1 ? new ResponseEntity<String>("success", HttpStatus.OK)
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }
