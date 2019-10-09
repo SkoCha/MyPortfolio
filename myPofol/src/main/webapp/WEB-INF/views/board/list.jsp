@@ -37,7 +37,7 @@
 								href='/board/read?bno=${board.bno}&pageNum=${pagination.pagi.pageNum}&amount=${pagination.pagi.amount}
 											&type=${pagination.pagi.type}
 											&keyword=${pagination.pagi.keyword}'>
-									<c:out value="${board.title}"></c:out>
+									<c:out value="${board.title}"/>[<c:out value="${board.replyCnt}"/>]
 							</a></td>
 							<td><c:out value="${board.writer}"></c:out></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd"

@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.log4j.Log4j;
+import net.mypofol.mapper.BoardMapper;
 import net.mypofol.mapper.ReplyMapper;
 import net.mypofol.model.Pagination;
 import net.mypofol.model.ReplyPageDTO;
@@ -18,9 +20,14 @@ public class ReplyService implements IReplyService{
 	@Autowired
 	private ReplyMapper mapper;
 	
+	@Autowired
+	private BoardMapper boardMapper;
+	
+	@Transactional
 	@Override
 	public int register(ReplyVO reply) {
 		log.info("@ReplyMapper.register");
+		boardMapper.updateReplyCnt(reply.getBno(), 1);
 		return mapper.create(reply);
 	}
 
@@ -36,9 +43,12 @@ public class ReplyService implements IReplyService{
 		return mapper.update(reply);
 	}
 
+	@Transactional
 	@Override
 	public int remove(Long rno) {
 		log.info("@ReplyMapper.remove");
+		ReplyVO reply = mapper.read(rno);
+		boardMapper.updateReplyCnt(reply.getBno(), -1);
 		return mapper.delete(rno);
 	}
 

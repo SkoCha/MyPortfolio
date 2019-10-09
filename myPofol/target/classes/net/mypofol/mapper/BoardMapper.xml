@@ -15,9 +15,9 @@
 	<select id="readListWithPaging"
 		resultType="net.mypofol.model.BoardVO">
 		<![CDATA[
-			select bno, title, content, writer, regdate, updatedate from
+			select bno, title, content, writer, regdate, updatedate, replycnt from
 			(select /*+INDEX_DESC(t_board pk_board)*/ 
-			rownum rn, bno, title, content, writer, regdate, updatedate from t_board 
+			rownum rn, bno, title, content, writer, regdate, updatedate, replycnt from t_board 
 			where
 		]]>
 			<include refid="searching"/>
@@ -59,6 +59,10 @@
 		writer = #{writer},
 		updateDate = sysdate
 		where bno = #{bno}
+	</update>
+	
+	<update id="updateReplyCnt">
+		update t_board set replycnt = replycnt + #{amount} where bno = #{bno}
 	</update>
 
 	<!-- DELETE QUERY -->
