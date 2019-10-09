@@ -1,5 +1,5 @@
 // ajax 처리를 위한 javscript module
-console.log("Reply Module Test");
+//console.log("Reply Module Test");
 
 var replyService = (function(){
 	
@@ -32,7 +32,7 @@ var replyService = (function(){
 		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
 			function (data) {
 				if(callback) {
-					callback(data);
+					callback(data.replyCnt, data.list);
 				}				
 		}).fail(function (xhr, status, err) {
 				if(error) {
@@ -82,7 +82,7 @@ var replyService = (function(){
 	
 	function get(rno, callback, error){
 		
-		$.get("/replies/" + rno + ".json", function(result) {
+		$.getJSON("/replies/" + rno + ".json", function(result) {
 			if(callback) {
 				callback(result);
 			}

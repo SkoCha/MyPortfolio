@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.mypofol.model.Pagination;
+import net.mypofol.model.ReplyPageDTO;
 import net.mypofol.model.ReplyVO;
 import net.mypofol.service.IReplyService;
 
@@ -39,10 +40,10 @@ public class ReplyController {
 //	특정 게시물의 댓글 리스트 조회
 	@RequestMapping(value = "/pages/{bno}/{page}", 
 			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_XML_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(@PathVariable("bno") Long bno, @PathVariable("page") int page) {
+	public ResponseEntity<ReplyPageDTO> getList(@PathVariable("bno") Long bno, @PathVariable("page") int page) {
 		
 		Pagination pagi = new Pagination(page, 10);		// 페이징처리, 페이지 당 댓글 수는 10개로 Set
-		return new ResponseEntity<List<ReplyVO>>(service.getList(pagi, bno), HttpStatus.OK);
+		return new ResponseEntity<>(service.getListPage(pagi, bno), HttpStatus.OK);
 	}
 	
 //	reply 테이블의 rno 칼럼으로 특정 댓글 조회

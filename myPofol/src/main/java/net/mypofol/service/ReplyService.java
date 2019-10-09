@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.log4j.Log4j;
 import net.mypofol.mapper.ReplyMapper;
 import net.mypofol.model.Pagination;
+import net.mypofol.model.ReplyPageDTO;
 import net.mypofol.model.ReplyVO;
 
 @Service
@@ -24,9 +25,9 @@ public class ReplyService implements IReplyService{
 	}
 
 	@Override
-	public ReplyVO get(Long bno) {
-		log.info("@ReplyMapper.get : " + bno);
-		return mapper.read(bno);
+	public ReplyVO get(Long rno) {
+		log.info("@ReplyMapper.get : " + rno);
+		return mapper.read(rno);
 	}
 
 	@Override
@@ -45,6 +46,11 @@ public class ReplyService implements IReplyService{
 	public List<ReplyVO> getList(Pagination pagi, Long bno) {
 		log.info("@ReplyMapper.getList By Bno : " + bno);
 		return mapper.readListWithPaging(pagi, bno);
+	}
+
+	@Override
+	public ReplyPageDTO getListPage(Pagination pagi, Long bno) {
+		return new ReplyPageDTO(mapper.readCountByBno(bno), mapper.readListWithPaging(pagi, bno));
 	}
 
 	

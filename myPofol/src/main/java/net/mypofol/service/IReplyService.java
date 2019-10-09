@@ -3,6 +3,7 @@ package net.mypofol.service;
 import java.util.List;
 
 import net.mypofol.model.Pagination;
+import net.mypofol.model.ReplyPageDTO;
 import net.mypofol.model.ReplyVO;
 
 public interface IReplyService {
@@ -16,5 +17,7 @@ public interface IReplyService {
 	public int remove(Long rno);
 	
 	public List<ReplyVO> getList(Pagination pagi, Long bno);
+	
+	public ReplyPageDTO getListPage(Pagination pagi, Long bno);
 	
 }

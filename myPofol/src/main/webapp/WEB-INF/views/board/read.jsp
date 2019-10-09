@@ -62,17 +62,21 @@
 			</div>
 			<div class="panel-body">
 				<ul class="chat">
+				<!-- 
 					<li class="left clearfix" data-rno='12'>
 						<div class="header">
 							<strong class="primary-font">user00</strong>
 							<small class="pull-right text-muted">2019-10-07 22:29</small>
 						</div>
-						<p>댓글창 테스트</p>
+						<p>댓글창 테스트</p>						
 					</li>
+				 -->
 				</ul>			
 			</div>
+			
+			<!-- 댓글 페이징 처리 -->
 			<div class="panel-footer">
-				페이징 처리
+				
 			</div>			
 		</div>
 	</div>
@@ -116,27 +120,35 @@
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript">
 $(document).ready(function (){
-var bnoValue = '<c:out value="${board.bno}"/>';
-var replyUL = $(".chat");
+	
+	var bnoValue = '<c:out value="${board.bno}"/>';
+	var replyUL = $(".chat");
 
 	showList(1);
 	
 	function showList(page) {
-		replyService.getList({bno: bnoValue, page: page || 1}, function(list){
+		replyService.getList({bno: bnoValue, page: page || 1}, function(replyCnt, list){
 		
-			var str = "";
-			if(list == null || list.length ==0) {
-				replyUL.html("");
+			if(page == -1) {
+				pageNum = Math.ceil(replyCnt / 10.0);
+				showList(pageNum);
 				return;
 			}
+			
+			var str = "";
+			if(list == null || list.length ==0) {
+				return;
+			}
+			
 			for(var i=0, len = list.length || 0; i<len; i++) {
 				str += "<li class='left clearfix' data-rno ='"+ list[i].rno +"'>";
-				str += "	<div><div class='header'><strong class='primary-font'>" + list[i].writer + "</strong>";
+				str += "	<div><div class='header'><strong class='primary-font'>["+ list[i].rno +"] " + list[i].writer + "</strong>";
 				str += "		<small class = 'pull-right text-muted'>" + replyService.displayTime(list[i].regDate) + "</small></div>";
 				str += "		<p>" + list[i].reply + "</p></div></li>";
 			}
 			
 			replyUL.html(str);
+			showReplyPage(replyCnt);
 		});
 		
 	}	
@@ -151,6 +163,7 @@ var replyUL = $(".chat");
 	var modalRemoveBtn = $("#modalRemoveBtn");
 	var modalModifyBtn = $("#modalModifyBtn");
 	
+	/*/board/read페이지에서 해당 게시물의 댓글 달기 버튼을 눌렀을 때 실행하는 JQuery 이벤트 */
 	$("#addReplyBtn").on("click", function(e){
 		modal.find("input").val("");
 		modalInputRegDate.closest("div").hide();
@@ -160,6 +173,7 @@ var replyUL = $(".chat");
 		
 		$(".modal").modal("show");
 	});
+	
 	
 	modalRegisterBtn.on("click", function(e){
 			
@@ -175,10 +189,11 @@ var replyUL = $(".chat");
 				
 				modal.find("input").val("");
 				modal.modal("hide");
-				showList(1);
+				showList(-1);
 			});
 		});
 	
+	/* 댓글을 클릭하였을 때 모달창을 띄우고 해당 댓글의 필드들을 폼 내용으로 출력하고 수정버튼과 삭제버튼 표시 */
 	$(".chat").on("click", "li", function(e){
 		
 		var rno = $(this).data("rno");
@@ -194,6 +209,81 @@ var replyUL = $(".chat");
 			
 			$(".modal").modal("show");
 		});
+	});
+	
+	/* 댓글의 모달창의 수정 버튼을 클릭하였을때 폼의 내용대로 댓글 수정, 모달 창을 숨기고 댓글 리스트 갱신 */
+	modalModifyBtn.on("click", function(e) {
+		
+		var reply = { rno : modal.data("rno"), reply : modalInputReply.val()};
+		replyService.update(reply, function(result){
+			
+			alert(result);
+			modal.modal("hide");
+			showList(pageNum);
+			
+		});
+		
+	});
+	
+	/* 댓글의 모달창의 삭제 버튼을 클릭하였을때 해당 댓글 번호의 필드 삭제, 모달 창을 숨기고 댓글 리스트 갱신 */
+	modalRemoveBtn.on("click", function(e) {
+		
+		var rno = modal.data("rno");
+		replyService.remove(rno, function(result) {
+			
+			alert(result);
+			modal.modal("hide");
+			showList(pageNum);
+			
+		});
+		
+	});
+	
+	var pageNum = 1;
+	var replyPageFooter = $(".panel-footer");
+	
+	function showReplyPage(replyCnt) {
+		
+		var endNum = Math.ceil(pageNum / 10.0) * 10;
+		var startNum = endNum - 9;
+		var prev = startNum != 1;
+		var next = false;
+		
+		if(endNum * 10 >= replyCnt) {
+			endNum = Math.ceil(replyCnt / 10.0);
+		}
+		
+		if(endNum * 10 < replyCnt) {
+			next = true;
+		}
+		
+		var str = "<ul class='pagination pull-right'>";
+		
+		if(prev) {
+			str += "<li class='page-item'><a class='page-link' href='" + (startNum - 1) + "'>이전</a></li>";
+		}
+		
+		for(var i = startNum; i <= endNum; i++){
+			var active = pageNum == i ? "active" : "";
+			str += "<li class='page-item " + active + " '><a class='page-link' href='" + i + "'>" + i + "</a></li>";
+		}
+		
+		if(next) {
+			str += "<li class='page-item'><a class='page-link' href='"+ (endNum + 1) +"'>다음</a></li>";
+		}
+		
+		str += "</ul>";
+		replyPageFooter.html(str);
+	}
+	
+	replyPageFooter.on("click", "li a", function(e){
+		
+		e.preventDefault();
+		var targetPageNum = $(this).attr("href");
+		pageNum = targetPageNum;
+		
+		showList(pageNum);
+		
 	});
 	
 });
