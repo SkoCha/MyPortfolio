@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee https://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -21,8 +21,14 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml
 			</param-value>
-		</init-param>
+		</init-param>	
 		<load-on-startup>1</load-on-startup>
+		<multipart-config>
+			<location>C:\\upload\\temp</location>
+			<max-file-size>20971520</max-file-size>
+			<max-request-size>41943040</max-request-size>
+			<file-size-threshold>20971520</file-size-threshold>
+		</multipart-config>
 	</servlet>
 
 	<servlet-mapping>
@@ -44,12 +50,7 @@
 		<servlet-name>appServlet</servlet-name>
 	</filter-mapping>
 
-	<multipart-config>
-		<location>C:\\upload\\temp</location>
-		<max-file-size>20971520</max-file-size>
-		<max-request-size>41943040</max-request-size>
-		<file-size-threshold>20971520</file-size-threshold>
-	</multipart-config>
+	
 
 	<error-page>
 		<error-code>400</error-code>

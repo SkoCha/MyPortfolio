@@ -49,8 +49,30 @@
 		</div>
 		<!-- /.panel -->
 	</div>
-	<!-- /.col-lg-12 -->
+	<!-- /.col-lg-12 -->		
+</div>
+<!-- 첨부 파일 -->
+<div class="bigPictureWrapper">
+	<div class="bigPicture">
 	
+	</div>
+</div>
+<div class="row">
+<div class="col-lg-12">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			첨부 파일			
+		</div>
+		<div class="panel-body">
+			<div class="uploadResult">
+				<ul>
+				
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 첨부 파일 끝-->
 	<!-- Reply List Start -->
 	<div class="col-lg-12">
 		<div class="panel panel-default">
@@ -115,7 +137,7 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<%@include file="../includes/footer.jsp"%>
+
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript">
@@ -289,23 +311,89 @@ $(document).ready(function (){
 });
 </script>
 <script type="text/javascript">
-	$(document).ready(function(){
+$(document).ready(function(){
+	
+	var operForm = $("#operForm");
+	
+	$("button[data-oper='modify']").on("click", function(e){
 		
-		var operForm = $("#operForm");
-		
-		$("button[data-oper='modify']").on("click", function(e){
-			
-			operForm.attr("action", "/board/modify").submit();
-			
-		});
-		
-		$("button[data-oper='list']").on("click", function(e){
-			
-			operForm.find("#bno").remove();
-			operForm.attr("action", "/board/list");
-			operForm.submit();
-		 
-		});		
+		operForm.attr("action", "/board/modify").submit();
 		
 	});
+	
+	$("button[data-oper='list']").on("click", function(e){
+		
+		operForm.find("#bno").remove();
+		operForm.attr("action", "/board/list");
+		operForm.submit();
+	 
+	});		
+	
+});
 </script>
+<script>
+$(document).ready(function() {
+	
+	var bno = '<c:out value="${board.bno}"/>';
+	
+	$.getJSON("/board/getUploadList", {bno: bno}, function(arr){
+		
+		console.log(arr);		
+		var str = "";
+		
+		$(arr).each(function(i, upload){
+			
+			// 이미지 파일일 경우
+			if(upload.fileType) {
+				
+				var fileCallPath = encodeURIComponent(upload.uploadPath + "/s_" + upload.uuid + "_" + upload.fileName);
+				str += "<li data-path='"+upload.uploadPath+"' data-uuid='"+upload.uuid+"' data-filename='"+upload.fileName+"' data-type='"+upload.fileType+"'><div>";
+				str += "<img src='/display?fileName="+fileCallPath+"'>";
+				str += "</div>";
+				str += "</li>";
+				
+			} else {
+				
+				str += "<li data-path='"+upload.uploadPath+"' data-uuid='"+upload.uuid+"' data-filename='"+upload.fileName+"' data-type='"+upload.fileType+"'><div>";
+				str += "<span>"+upload.fileName+"</span><br>";
+				str += "<img src='/resources/image/attach.jpg'>";
+				str += "</div>";
+				str += "</li>";
+				
+			}			
+		});
+		$(".uploadResult ul").html(str);
+	});
+	
+	$(".uploadResult").on("click", "li", function(e){
+		
+		// console.log("이미지 보기");
+		var liObj = $(this);
+		var path = encodeURIComponent(liObj.data("path") + "/" + liObj.data("uuid") + "_" + liObj.data("filename"));
+		
+		// 이미지 타입일 경우
+		if(liObj.data("type")) {
+			showImage(path.replace(new RegExp(/\\/g), "/"));
+		} else {
+			// 이미지 타입이 아닐 경우 다운로드
+			self.location = "/download?fileName=" + path;
+		}
+		
+	});
+	
+	// 첨부 파일 이미지 클릭 시 원본 크기로 애니메이션 지정
+	function showImage(fileCallPath) {
+		
+		// alert(fileCallPath);
+		
+		$(".bigPictureWrapper").css("display", "flex").show();
+		$(".bigPicture").html("<img src='/display?fileName="+fileCallPath+"'>").animate({width: '100%', height: '100%'}, 1000);
+		setTimeout(function(){
+			$('.bigPictureWrapper').hide();
+		}, 1000);				
+		
+	}
+	
+});
+</script>
+<%@include file="../includes/footer.jsp"%>

@@ -41,6 +41,9 @@
 <link href="/resources/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 
+<!-- My CSS -->
+<link href="/resources/commons/mycss.css" rel="stylesheet" type="text/css">
+
 <!-- https://kit.fontawesome.com/50f9917a32.js -->	
 <script src="https://kit.fontawesome.com/50f9917a32.js"></script>		
 

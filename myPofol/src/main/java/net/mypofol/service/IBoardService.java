@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.mypofol.model.BoardVO;
 import net.mypofol.model.Pagination;
+import net.mypofol.model.UploadVO;
 
 public interface IBoardService {
 	
@@ -18,4 +19,6 @@ public interface IBoardService {
 	public boolean remove(Long bno);	
 	
 	public int readTotal(Pagination pagi);
+	
+	public List<UploadVO> getUploadList(Long bno);
 }
