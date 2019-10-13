@@ -14,4 +14,6 @@ public interface UploadMapper {
 	
 	public List<UploadVO> selectByBno(Long bno);
 	
+	public List<UploadVO> getOldFiles();
+	
 }

@@ -9,6 +9,10 @@
 	<select id="selectByBno" resultType="net.mypofol.model.UploadVO">
 		select * from t_upload where bno = #{bno}
 	</select>
+	
+	<select id="getOldFiles" resultType="net.mypofol.model.UploadVO">
+		select * from b_upload where uploadPath = to_char(sysdate -1,'yyyy/mm/dd')
+	</select>
 	<!-- INSERT QUERY -->
 	<insert id="insert">
 		insert into t_upload (uuid, uploadPath, fileName, fileType, bno)
