@@ -42,11 +42,12 @@ var replyService = (function(){
 		
 	}
 	
-	function remove(rno, callback, error) {
+	function remove(rno, writer, callback, error) {
 		
 		$.ajax({
 			type : 'delete',
 			url : '/replies/' + rno,
+			data : JSON.stringify({rno: rno, writer: writer}),
 			success : function(deleteResult, status, xhr) {
 				if(callback){
 					callback(deleteResult);

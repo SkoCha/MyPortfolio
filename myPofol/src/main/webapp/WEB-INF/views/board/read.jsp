@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 <div class="row">
 	<div class="col-lg-12">
@@ -35,7 +36,12 @@
 					<label>Writer</label><input class="form-control" name="writer"
 						value='<c:out value="${board.writer}"/>' readonly="readonly">
 				</div>
-				<button data-oper='modify' class="btn btn-default">게시글 수정</button>
+				<sec:authentication property="principal" var="pinfo"/>
+					<sec:authorize access="isAuthenticated()">
+						<c:if test="${pinfo.username eq board.writer }">
+							<button data-oper='modify' class="btn btn-default">게시글 수정</button>
+						</c:if>
+					</sec:authorize>
 				<button data-oper='list' class="btn btn-info">목록 보기</button>
 				<form id="operForm" action="/board/modify" method="get">
 					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}" />'>
@@ -79,8 +85,9 @@
 			<div class="panel-heading">
 				<i class="fas fa-comment-dots"></i>
 				<label>댓글 목록</label>
-				<button id='addReplyBtn' type="button"
-					class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+				<sec:authorize access="isAuthenticated()">
+					<button id='addReplyBtn' type="button" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+				</sec:authorize>
 			</div>
 			<div class="panel-body">
 				<ul class="chat">
@@ -130,7 +137,7 @@
                 <button id="modalModifyBtn" type="button" class="btn btn-warning" >수정</button>
                 <button id="modalRemoveBtn" type="button" class="btn btn-danger" >삭제</button>
                 <button id="modalCloseBtn" type="button" class="btn btn-default" >닫기</button>
-            </div>
+            </div>            
         </div>
         <!-- /.modal-content -->
     </div>
@@ -141,7 +148,7 @@
 
 <script type="text/javascript" src="/resources/js/reply.js"></script>
 <script type="text/javascript">
-$(document).ready(function (){
+$(document).ready(function (){	
 	
 	var bnoValue = '<c:out value="${board.bno}"/>';
 	var replyUL = $(".chat");
@@ -185,9 +192,23 @@ $(document).ready(function (){
 	var modalRemoveBtn = $("#modalRemoveBtn");
 	var modalModifyBtn = $("#modalModifyBtn");
 	
+	var writer = null;
+	
+	<sec:authorize access="isAuthenticated()">
+		writer = '<sec:authentication property="principal.username"/>';
+	</sec:authorize>
+		
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
+	$(document).ajaxSend(function(e, xhr, options){
+		xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+	});
+	
 	/*/board/read페이지에서 해당 게시물의 댓글 달기 버튼을 눌렀을 때 실행하는 JQuery 이벤트 */
 	$("#addReplyBtn").on("click", function(e){
 		modal.find("input").val("");
+		modal.find("input[name='writer']").val(writer);
 		modalInputRegDate.closest("div").hide();
 		modal.find("button[id != 'modalCloseBtn']").hide();
 		
@@ -236,7 +257,21 @@ $(document).ready(function (){
 	/* 댓글의 모달창의 수정 버튼을 클릭하였을때 폼의 내용대로 댓글 수정, 모달 창을 숨기고 댓글 리스트 갱신 */
 	modalModifyBtn.on("click", function(e) {
 		
-		var reply = { rno : modal.data("rno"), reply : modalInputReply.val()};
+		var originWriter = modalInputWriter.val();
+		var reply = { rno : modal.data("rno"), reply : modalInputReply.val(), writer : originWriter};
+		
+		if(!writer) {
+			alert("로그인 후에 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		if(writer != originWrtier) {
+			alert("본인 작성한 댓글만 수정 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
 		replyService.update(reply, function(result){
 			
 			alert(result);
@@ -251,7 +286,22 @@ $(document).ready(function (){
 	modalRemoveBtn.on("click", function(e) {
 		
 		var rno = modal.data("rno");
-		replyService.remove(rno, function(result) {
+		
+		if(!writer) {
+			alert("로그인 후에 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		var originWriter = modalInputWriter.val();
+		
+		if(writer != originWrtier) {
+			alert("본인 작성한 댓글만 삭제가 가능합니다.");
+			modal.modal("hide");
+			return;
+		}
+		
+		replyService.remove(rno, originWrtier, function(result) {
 			
 			alert(result);
 			modal.modal("hide");

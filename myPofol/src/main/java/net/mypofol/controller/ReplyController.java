@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,8 @@ public class ReplyController {
 	private IReplyService service;
 	
 //	json 타입의 데이터를 브라우저로부터 받아서 ReplyVO 객체 타입으로 DB에 insert하고 결과를 String으로 반환
-//	삼항 연산자를 이용해서 쿼리 실행 반환 결과가 1이면 브라우저에 200, 아니면 500 상태 반환 
+//	삼항 연산자를 이용해서 쿼리 실행 반환 결과가 1이면 브라우저에 200, 아니면 500 상태 반환
+	@PreAuthorize("isAuthenticated()") 
 	@RequestMapping(value = "/new", method = {RequestMethod.POST},
 				consumes = "application/json",
 				produces = { MediaType.TEXT_PLAIN_VALUE})
@@ -54,15 +56,17 @@ public class ReplyController {
 		return new ResponseEntity<ReplyVO>(service.get(rno), HttpStatus.OK);
 	}
 	
-//	reply 테이블의 rno 칼럼으로 특정 댓글 삭제, DeleteMapping
+//	reply 테이블의 rno 칼럼으로 특정 댓글 삭제, DeleteMapping, 인증된 사용자 비교 후 삭제 처리
+	@PreAuthorize("principal.username == #reply.writer")
 	@RequestMapping(value = "/{rno}", method = {RequestMethod.DELETE}, produces = {MediaType.TEXT_PLAIN_VALUE})
-	public ResponseEntity<String> remove(@PathVariable("rno") Long rno) {
+	public ResponseEntity<String> remove(@RequestBody ReplyVO reply, @PathVariable("rno") Long rno) {
 		
 		return service.remove(rno) == 1 ? new ResponseEntity<String>("success", HttpStatus.OK)
 				: new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 //	json 타입의 데이터를 받아서(@RequestBody) 특정 댓글 수정, Put 방식 또는 Patch 방식
+	@PreAuthorize("principal.username == #reply.writer")
 	@RequestMapping(value = "/{rno}", method = {RequestMethod.PUT, RequestMethod.PATCH},
 				consumes = "application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
 	public ResponseEntity<String> modify(@PathVariable("rno") Long rno, @RequestBody ReplyVO reply) {

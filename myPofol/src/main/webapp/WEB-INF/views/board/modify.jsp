@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 <div class="row">
 	<div class="col-lg-12">
@@ -44,12 +45,18 @@
 					<label>Update Date</label><input class="form-control" name='updateDate'
 						value='<fmt:formatDate pattern="yyyy/MM/dd" value="${board.updateDate}"/>' readonly="readonly">
 				</div>
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 				<input type="hidden" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
 				<input type="hidden" name="amount" value='<c:out value="${pagi.amount}" />'>
 				<input type="hidden" name="type" value='<c:out value="${pagi.type}" />'>
 				<input type="hidden" name="keyword" value='<c:out value="${pagi.keyword}" />'>
-				<button type="submit" data-oper='modify' class="btn btn-default">수정 하기</button>
-				<button type="submit" data-oper='remove' class="btn btn-danger">삭제 하기</button>
+				<sec:authentication property="principal" var="pinfo"/>
+				<sec:authorize access="isAuthenticated()">
+					<c:if test="${pinfo.username eq board.writer}">
+						<button type="submit" data-oper='modify' class="btn btn-default">수정 하기</button>
+						<button type="submit" data-oper='remove' class="btn btn-danger">삭제 하기</button>					
+					</c:if>
+				</sec:authorize>
 				<button type="submit" data-oper='list' class="btn btn-info">목록 보기</button>
 				<!-- /.panel-body -->
 				</form>
@@ -146,6 +153,9 @@ $(document).ready(function() {
 		return true;
 	}
 	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
+	
 	$("input[type='file']").change(function(e){
 			
 			var formData = new FormData();
@@ -167,6 +177,9 @@ $(document).ready(function() {
 				contentType: false,
 				data: formData,
 				type: 'POST',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+				},
 				dataType: 'json',
 					success: function(result) {
 						console.log(result);

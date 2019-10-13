@@ -6,9 +6,11 @@ import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,11 +43,13 @@ public class BoardController {
 	}
 	
 	@RequestMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public void register() {	
 		
 	}
 	
 	@RequestMapping(value = "/register", method = {RequestMethod.POST})
+	@PreAuthorize("isAuthenticated()")
 	public String register(BoardVO board, RedirectAttributes reAttr) {
 //		log.info("#############################################");
 //		log.info("register : " + board);
@@ -63,6 +67,7 @@ public class BoardController {
 		model.addAttribute("board", service.read(bno));
 	}
 	
+	@PreAuthorize("principal.username == #board.writer")
 	@RequestMapping(value = "/modify", method = {RequestMethod.POST})
 	public String modify(BoardVO board, @ModelAttribute("pagi") Pagination pagi, RedirectAttributes reAttr) {
 		if(service.modify(board)) {
@@ -76,6 +81,7 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@PreAuthorize("principal.username == #writer")
 	@RequestMapping(value = "/remove", method = {RequestMethod.POST})
 	public String remove(Long bno, @ModelAttribute("pagi") Pagination pagi, RedirectAttributes reAttr) {
 		

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="customAccessHandler" class="net.mypofol.security.CustomAccessDeniedHandler">	
+	</bean>
+	
+	<!-- <bean id="customLoginSuccess" class="net.mypofol.security.CustomLoginSuccessHandler"></bean> -->
+	
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+	</bean>
+	
+	<bean id="customUserDetailsService" class="net.mypofol.security.CustomUserDetailsService">
+	</bean>
+		
+	<security:http>
+		<!-- <security:intercept-url pattern="/sample/all" access="permitAll"/> -->
+		<!-- <security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/> -->
+		<!-- <security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/> --> 
+		<security:access-denied-handler ref="customAccessHandler"/>
+		<security:form-login login-page="/login"/>
+		<security:logout logout-url="/logout" invalidate-session="true" delete-cookies="remember-me,JSESSION_ID"/>
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+		
+		
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+	</security:http>
+	
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="customUserDetailsService">
+			<!-- <security:jdbc-user-service data-source-ref="dataSource"/> -->
+			<!-- <security:password-encoder ref="customPasswordEncoder"/> -->
+			<security:password-encoder ref="bcryptPasswordEncoder"/>
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+</beans>
