@@ -26,8 +26,15 @@
 			t_member mem left outer join t_member_auth auth on mem.userid = auth.userid
 			where mem.userid = #{userid}
 		</select>
+	
 	<!-- INSERT QUERY -->
-
+		<insert id="insertMember" parameterType="net.mypofol.model.MemberVO">
+			insert all 
+				into t_member(userid, userpw, userName) values (#{userid},#{userpw},#{userName})
+				into t_member_auth(userid, auth) values (#{userid}, 'ROLE_USER')
+				select * from dual
+		</insert>
+		
 	<!-- UPDATE QUERY -->
 
 	<!-- DELETE QUERY -->
