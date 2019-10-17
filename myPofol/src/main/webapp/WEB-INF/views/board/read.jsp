@@ -4,19 +4,18 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 <div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">Board Read</h1>
+	<div class="col-lg-12">		
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<label>Article</label>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header">
+				<label><h3>Board Read</h3></label>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<!-- /.panel-heading -->
 
 				<div class="form-group">
@@ -29,8 +28,7 @@
 				</div>
 				<div class="form-group">
 					<label>Content</label>
-					<textarea class="form-control" rows="3" name="content"
-						value='<c:out value="${board.content}"/>'></textarea>
+					<textarea class="form-control" rows="3" name="content" readonly="readonly"><c:out value="${board.content}"/></textarea>
 				</div>
 				<div class="form-group">
 					<label>Writer</label><input class="form-control" name="writer"
@@ -38,11 +36,11 @@
 				</div>
 				<sec:authentication property="principal" var="pinfo"/>
 					<sec:authorize access="isAuthenticated()">
-						<c:if test="${pinfo.username eq board.writer }">
-							<button data-oper='modify' class="btn btn-default">게시글 수정</button>
+						<c:if test="${pinfo.username eq board.writer}">
+							<button data-oper='modify' class="btn btn-outline-dark">게시글 수정</button>
 						</c:if>
 					</sec:authorize>
-				<button data-oper='list' class="btn btn-info">목록 보기</button>
+				<button data-oper='list' class="btn btn-dark">목록 보기</button>
 				<form id="operForm" action="/board/modify" method="get">
 					<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}" />'>
 					<input type="hidden" id="pageNum" name="pageNum" value='<c:out value="${pagi.pageNum}" />'>
@@ -55,7 +53,9 @@
 		</div>
 		<!-- /.panel -->
 	</div>
-	<!-- /.col-lg-12 -->		
+	<!-- /.col-lg-12 -->
+	<div class="col-lg-2">
+	</div>		
 </div>
 <!-- 첨부 파일 -->
 <div class="bigPictureWrapper">
@@ -64,12 +64,12 @@
 	</div>
 </div>
 <div class="row">
-<div class="col-lg-12">
-	<div class="panel panel-default">
-		<div class="panel-heading">
+<div class="col-lg-10">
+	<div class="card">
+		<div class="card-header">
 			첨부 파일			
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 			<div class="uploadResult">
 				<ul>
 				
@@ -80,16 +80,19 @@
 </div>
 <!-- 첨부 파일 끝-->
 	<!-- Reply List Start -->
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<i class="fas fa-comment-dots"></i>
-				<label>댓글 목록</label>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header">
+				<div class="d-flex justify-content-between">
+				<div>
+					<i class="fas fa-comment-dots"></i><label>댓글 목록</label>
+				</div>
 				<sec:authorize access="isAuthenticated()">
-					<button id='addReplyBtn' type="button" class="btn btn-primary btn-xs pull-right">댓글 달기</button>
+					<button id="addReplyBtn" type="button" class="btn btn-secondary btn-sm">댓글 달기</button>
 				</sec:authorize>
+				</div>
 			</div>
-			<div class="panel-body">
+			<div id="replyBody" class="card-body">
 				<ul class="chat">
 				<!-- 
 					<li class="left clearfix" data-rno='12'>
@@ -104,19 +107,20 @@
 			</div>
 			
 			<!-- 댓글 페이징 처리 -->
-			<div class="panel-footer">
+			<div class="card-footer">
 				
 			</div>			
 		</div>
 	</div>
 </div>
  <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">댓글 작성란</h4>
+                <h4 class="modal-title">댓글 작성란</h4>
+                <button type="button" class="close" data-dismiss="modal"
+										aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -136,7 +140,7 @@
                 <button id="modalRegisterBtn" type="button" class="btn btn-primary" >등록</button>
                 <button id="modalModifyBtn" type="button" class="btn btn-warning" >수정</button>
                 <button id="modalRemoveBtn" type="button" class="btn btn-danger" >삭제</button>
-                <button id="modalCloseBtn" type="button" class="btn btn-default" >닫기</button>
+                <button id="modalCloseBtn" type="button" class="btn btn-outline-dark" >닫기</button>
             </div>            
         </div>
         <!-- /.modal-content -->
@@ -146,7 +150,7 @@
 <!-- /.modal -->
 
 
-<script type="text/javascript" src="/resources/js/reply.js"></script>
+<script type="text/javascript" src="/resources/commons/reply.js"></script>
 <script type="text/javascript">
 $(document).ready(function (){	
 	
@@ -170,10 +174,12 @@ $(document).ready(function (){
 			}
 			
 			for(var i=0, len = list.length || 0; i<len; i++) {
-				str += "<li class='left clearfix' data-rno ='"+ list[i].rno +"'>";
-				str += "	<div><div class='header'><strong class='primary-font'>["+ list[i].rno +"] " + list[i].writer + "</strong>";
-				str += "		<small class = 'pull-right text-muted'>" + replyService.displayTime(list[i].regDate) + "</small></div>";
-				str += "		<p>" + list[i].reply + "</p></div></li>";
+				str +="<div class='card-body border-bottom-secondary' data-rno='"+list[i].rno+"'>";
+		        str +="  <div><div class='header'><strong class='primary-font'>["
+		     	   +list[i].rno+"] "+list[i].writer+"</strong>"; 
+		        str +="    <small class='float-right text-muted'>"
+		            +replyService.displayTime(list[i].regDate)+"</small></div>";
+		        str +="    <p>"+list[i].reply+"</p></div></div>";
 			}
 			
 			replyUL.html(str);
@@ -183,7 +189,7 @@ $(document).ready(function (){
 	}	
 	
 	/* Modal의 <input> 요소들 */
-	var modal = $(".modal");
+	var modal = $("#myModal");
 	var modalInputReply = modal.find("input[name='reply']");
 	var modalInputWriter = modal.find("input[name='writer']");
 	var modalInputRegDate = modal.find("input[name='regDate']");
@@ -191,6 +197,7 @@ $(document).ready(function (){
 	var modalRegisterBtn = $("#modalRegisterBtn");
 	var modalRemoveBtn = $("#modalRemoveBtn");
 	var modalModifyBtn = $("#modalModifyBtn");
+	var modalCloseBtn = $("#modalCloseBtn");
 	
 	var writer = null;
 	
@@ -214,7 +221,7 @@ $(document).ready(function (){
 		
 		modalRegisterBtn.show();
 		
-		$(".modal").modal("show");
+		modal.modal("show");
 	});
 	
 	
@@ -237,7 +244,7 @@ $(document).ready(function (){
 		});
 	
 	/* 댓글을 클릭하였을 때 모달창을 띄우고 해당 댓글의 필드들을 폼 내용으로 출력하고 수정버튼과 삭제버튼 표시 */
-	$(".chat").on("click", "li", function(e){
+	$(".chat").on("click", ".card-body", function(e){
 		
 		var rno = $(this).data("rno");
 		replyService.get(rno, function(reply){
@@ -250,7 +257,7 @@ $(document).ready(function (){
 			modalModifyBtn.show();
 			modalRemoveBtn.show();
 			
-			$(".modal").modal("show");
+			modal.modal("show");
 		});
 	});
 	
@@ -311,8 +318,14 @@ $(document).ready(function (){
 		
 	});
 	
+	modalCloseBtn.on("click", function(){
+		
+		modal.modal("hide");
+		
+	});
+	
 	var pageNum = 1;
-	var replyPageFooter = $(".panel-footer");
+	var replyPageFooter = $(".card-footer");
 	
 	function showReplyPage(replyCnt) {
 		
@@ -329,7 +342,7 @@ $(document).ready(function (){
 			next = true;
 		}
 		
-		var str = "<ul class='pagination pull-right'>";
+		var str = "<ul class='pagination float-right'>";
 		
 		if(prev) {
 			str += "<li class='page-item'><a class='page-link' href='" + (startNum - 1) + "'>이전</a></li>";

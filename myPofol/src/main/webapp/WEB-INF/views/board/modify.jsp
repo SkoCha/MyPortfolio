@@ -4,19 +4,18 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@include file="../includes/header.jsp"%>
 <div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">Board Modify</h1>
+	<div class="col-lg-12">		
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<label>Board Modify Page</label>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header">
+				<label><h3 class="page-header">Board Modify</h3></label>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<!-- /.panel-heading -->
 				<form role="form" action="/board/modify" method="post">
 				<div class="form-group">
@@ -29,9 +28,7 @@
 				</div>
 				<div class="form-group">
 					<label>Content</label>
-					<textarea class="form-control" rows="3" name="content">
-						<c:out value="${board.content}"/>
-					</textarea>
+					<textarea class="form-control" rows="3" name="content"><c:out value="${board.content}"/></textarea>
 				</div>
 				<div class="form-group">
 					<label>Writer</label><input class="form-control" name="writer"
@@ -53,7 +50,7 @@
 				<sec:authentication property="principal" var="pinfo"/>
 				<sec:authorize access="isAuthenticated()">
 					<c:if test="${pinfo.username eq board.writer}">
-						<button type="submit" data-oper='modify' class="btn btn-default">수정 하기</button>
+						<button type="submit" data-oper='modify' class="btn btn-secondary">수정 하기</button>
 						<button type="submit" data-oper='remove' class="btn btn-danger">삭제 하기</button>					
 					</c:if>
 				</sec:authorize>
@@ -65,6 +62,8 @@
 		<!-- /.panel -->
 	</div>
 	<!-- /.col-lg-12 -->
+	<div class="col-lg-2">
+	</div>	
 </div>
 <!-- 첨부 파일 -->
 <div class="bigPictureWrapper">
@@ -73,23 +72,23 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				첨부 파일			
-			</div>
-			<div class="panel-body">
-				<div class="form-group uploadDiv">
+<div class="col-lg-10">
+	<div class="card">
+		<div class="card-header">
+			첨부 파일			
+		</div>
+		<div class="card-body">
+		<div class="form-group uploadDiv">
 					<input type="file" name="uploadFile" multiple>
 				</div>
-				<div class="uploadResult">
-					<ul>
-					
-					</ul>
-				</div>
+			<div class="uploadResult">
+				<ul>
+				
+				</ul>
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 <!-- 첨부 파일 끝-->
 <script type="text/javascript">

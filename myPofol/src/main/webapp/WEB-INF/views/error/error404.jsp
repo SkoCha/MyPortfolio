@@ -1,19 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ include file="../includes/header.jsp" %>
+<style type="text/css">
+	html,
+	body {
+	  height: 100%;
+	}
+	
+	#page-content {
+	  flex: 1 0 auto;
+	}
+	
+	#sticky-footer {
+	  flex-shrink: none;
+	}
+	
+	footer {
 
+    position:absolute;
 
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 mx-auto">
-          <h2>잘못된 요청으로 인한 페이지</h2>
-          <p class="lead">This is a great place to talk about your webpage. This template is purposefully unstyled so you can use it as a boilerplate or starting point for you own landing page designs! This template features:</p>
-          <ul>
-            <li>Clickable nav links that smooth scroll to page sections</li>
-            <li>Responsive behavior when clicking nav links perfect for a one page website</li>
-            <li>Bootstrap's scrollspy feature which highlights which section of the page you're on in the navbar</li>
-            <li>Minimal custom CSS so you are free to explore your own unique design options</li>
-          </ul>
+    bottom:0;
+
+    width:100%;
+
+}
+</style>
+<div class="d-flex flex-column">
+  <div id="page-content">
+    <div class="container text-center">
+      <div class="row justify-content-center">
+        <div class="col-md-7">
+          <h1 class="font-weight-light mt-4 text-black">잘못된 요청으로 인한 페이지</h1>
+          	<p class="lead text-black-50">요청하신 주소에 대한 페이지가 존재 하지 않습니다. </p>
         </div>
       </div>
     </div>
-  
+  </div>
+</div> 
+<%@ include file="../includes/footer.jsp" %>

@@ -2,14 +2,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@ include file="./includes/member_header.jsp" %>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">회원 가입</h3>
+    <div class="container h-100">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">회원 가입</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <form role="form" method="post" action="/join">
                             <fieldset>
                                 <div class="form-group">
@@ -33,7 +33,7 @@
                                 <%-- <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                                 <input type="submit" class="btn btn-lg btn-success btn-block" value="가입 하기">
-                                <input type="reset" class="btn btn-lg btn-default btn-block" value="다시 작성">
+                                <input type="reset" class="btn btn-lg btn-outline-secondary btn-block" value="다시 작성">
                             </fieldset>
                         </form>
                     </div>

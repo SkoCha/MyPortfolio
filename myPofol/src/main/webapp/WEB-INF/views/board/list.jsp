@@ -4,23 +4,24 @@
 <%@include file="../includes/header.jsp"%>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Tables</h1>
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Board List Page
-				<button id='regBtn' type="button"
-					class="btn btn-primary btn-xs pull-right">글 작성</button>
+	<div class="col-lg-1"></div>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header">
+				<div class="d-flex justify-content-between">
+					<h2>Board</h2>
+					<button id='regBtn' type="button" class="btn btn-dark btn-sm">글 작성</button>
+				</div>
 			</div>
 			<!-- /.panel-heading -->
-			<div class="panel-body">
+			<div class="card-body">
 				<table class="table table-striped table-bordered table-hover">
-					<thead>
+					<thead class="thead-dark">
 						<tr>
 							<th><bold>No</bold></th>
 							<th>Subject</th>
@@ -37,7 +38,7 @@
 								href='/board/read?bno=${board.bno}&pageNum=${pagination.pagi.pageNum}&amount=${pagination.pagi.amount}
 											&type=${pagination.pagi.type}
 											&keyword=${pagination.pagi.keyword}'>
-									<c:out value="${board.title}"/>[<c:out value="${board.replyCnt}"/>]
+									<c:out value="${board.title}"/>&nbsp;<span class="badge badge-dark"><c:out value="${board.replyCnt}"/></span>
 							</a></td>
 							<td><c:out value="${board.writer}"></c:out></td>
 							<td><fmt:formatDate pattern="yyyy-MM-dd"
@@ -47,12 +48,12 @@
 						</tr>
 					</c:forEach>
 				</table>
-
+				</div>
+				<div class="card-footer">
 				<!-- Searching bar -->
-				<div class="row">
 					<form id="searchForm" action="/board/list" method="get">
-						<div class="col-lg-2">
-							<div class="form-group">
+						<div class="form-row">
+							<div class="form-group col-md-2">
 								<select class="form-control" name='type'>
 									<option value=""
 										<c:out value="${pagination.pagi.type == null ? 'selected' : '' }" />>---</option>
@@ -74,32 +75,29 @@
 										<c:out value="${pagination.pagi.type eq 'TWC' ? 'selected' : '' }" />>제목
 										+ 내용 + 작성자</option>
 								</select>
+								</div>
+							<div class="form-group col-md-4 input-group">
+									<input class="form-control" type="text" name="keyword"
+										value='<c:out value="${pagination.pagi.keyword}" />'> <input
+										type="hidden" name="pageNum"
+										value='<c:out value="${pagination.pagi.pageNum}" />'> <input
+										type="hidden" name="amount"
+										value='<c:out value="${pagination.pagi.amount}" />'>
+									<div class="input-group-append">	 
+										<span>
+										<button class="btn btn-outline-secondary">검색</button>
+									</span>
+									</div>
 							</div>
-						</div>
-						<div class="col-lg-2">
-							<div class="form-group input-group">
-								<input class="form-control" type="text" name="keyword"
-									value='<c:out value="${pagination.pagi.keyword}" />'> <input
-									type="hidden" name="pageNum"
-									value='<c:out value="${pagination.pagi.pageNum}" />'> <input
-									type="hidden" name="amount"
-									value='<c:out value="${pagination.pagi.amount}" />'> <span
-									class="input-group-btn">
-									<button class="btn btn-default">
-										<i class="fa fa-search"></i>
-									</button>
-								</span>
-							</div>
+						
 						</div>
 					</form>
-				</div>
 
 				<!-- Paging처리 -->
 				<div class="col-lg-12">
-					<div class="pull-right">
-						<ul class="pagination">
+						<ul class="pagination justify-content-center">
 							<c:if test="${pagination.prev}">
-								<li class="paginate_button previous"><a
+								<li class="paginate_button previous"><a class="page-link"
 									href="/board/list?pageNum=${pagination.startPage - 1}
 							 				&amount=${pagination.pagi.amount}
 											&type=${pagination.pagi.type}
@@ -109,8 +107,8 @@
 							<c:forEach var="num" begin="${pagination.startPage}"
 								end="${pagination.endPage}">
 								<li
-									class="pagination_button ${pagination.pagi.pageNum == num ? "active":""} ">
-									<a
+									class="page-item ${pagination.pagi.pageNum == num ? "active":""} ">
+									<a class="page-link"
 									href="/board/list?pageNum=${num}
 									&amount=${pagination.pagi.amount}
 									&type=${pagination.pagi.type}
@@ -118,14 +116,13 @@
 								</li>
 							</c:forEach>
 							<c:if test="${pagination.next}">
-								<li class="paginate_button next"><a
+								<li class="paginate_button next"><a class="page-link"
 									href="/board/list?pageNum=${pagination.endPage + 1}
 									&amount=${pagination.pagi.amount}
 									&type=${pagination.pagi.type}
 									&keyword=${pagination.pagi.keyword}">다음</a></li>
 							</c:if>
 						</ul>
-					</div>
 				</div>
 				<%-- <form id="actionForm" action="/board/list" method="get">
 					<input type="hidden" name="pageNum" value="${pagination.pagi.pageNum}">
@@ -139,11 +136,11 @@
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal"
-									aria-hidden="true">&times;</button>
 								<h4 class="modal-title" id="myModalLabel">알림</h4>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close"><span aria-hidden="true">&times;</span></button>
 							</div>
-							<div class="modal-body">처리가 완료 되었습니다.</div>
+							<div class="modal-body"><p>처리가 완료 되었습니다.</p></div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-primary"
 									data-dismiss="modal">닫기</button>
@@ -161,6 +158,7 @@
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
+<div class="col-lg-1"></div>
 
 <script type="text/javascript">
 	$(document).ready(

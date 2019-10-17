@@ -5,19 +5,19 @@
 <%@include file="../includes/header.jsp"%>
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">Tables</h1>
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
 <!-- /.row -->
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading"><label>게시글 작성</label></div>
+<div class="col-lg-1"></div>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header"><label><h2>게시글 작성</h2></a></label></div>
 			<!-- /.panel-heading -->
-			<div class="panel-body">		
+			<div class="card-body">		
 				<form role="form" action="/board/register" method="post">
-					<input type="hidden" name="${_csrf.parameterName }" value="${_csrf.token }">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 					<div class="form-group">
 						<label>Title</label><input class="form-control" name='title'/>
 					</div>
@@ -28,8 +28,8 @@
 						<label>Writer</label><input class="form-control" name='writer'
 						value='<sec:authentication property="principal.username"/>' readonly="readonly"/>
 					</div>
-					<button type="submit" class="btn btn-default">등록</button>					
-					<button type="reset" class="btn btn-default">내용 지우기</button>					
+					<button type="submit" class="btn btn-secondary">등록</button>					
+					<button type="reset" class="btn btn-outline-dark">내용 지우기</button>					
 				</form>
 			</div>
 			<!-- /.panel-body -->
@@ -37,25 +37,31 @@
 		<!-- /.panel -->
 	</div>
 	<!-- /.col-lg-12 -->
+	<div class="col-lg-2">
+	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+	<div class="col-lg-1"></div>
+	<div class="col-lg-10">
+		<div class="card">
+			<div class="card-header">
 				파일 업로드			
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<div class="form-group uploadDiv">
 					<input type="file" name="uploadFile" multiple>
 				</div>
-				<div class="uploadResult">
-					<ul>
-					
-					</ul>
+				<div class="card-footer">
+					<div class="uploadResult">
+						<ul>
+						
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="col-lg-1"></div>
 </div>
 <script>
 
