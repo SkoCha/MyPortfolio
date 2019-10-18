@@ -25,7 +25,7 @@
   <li>Java 8</li>
   <li>JSP 2.3</li>
   <li>Servlet 3.1</li>
-  <li>SpringFramework 5.0.7</li>
+  <li>SpringFramework 5.0.7(XML)</li>
 </ul>
 
 
@@ -38,3 +38,9 @@
 
 
 ## 주요 기능
+<ul>
+  <li>게시물 CRUD</li>
+  <li>회원가입, 로그인, 로그아웃(Spring-Security)</li>
+  <li>파일 업로드 및 다운로드, 댓글 CRUD(Restful, Ajax)</li>
+  <li>게시물 검색, 페이징 구현</li>
+</ul>
